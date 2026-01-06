@@ -1,52 +1,1267 @@
-('selected', btn.dataset.character === gameState.character);
-            });
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  
+  <!-- ============ PWA META TAGS ============ -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Лесная Тропа" />
+  <meta name="theme-color" content="#FFF9F0" />
+  <meta name="description" content="🌳 Лесная Тропа Светлячков — образовательная PWA для детей 3-7 лет. 12 игр, 20 медалей, работает без интернета!" />
+  <meta name="keywords" content="игра, дети, обучение, развитие, PWA, мобильное приложение" />
+  <meta name="author" content="Лесная Тропа" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  
+  <!-- ============ PWA MANIFEST (Embedded) ============ -->
+  <link rel="manifest" href="data:application/json,{%22name%22:%22🌳%20Лесная%20Тропа%20Светлячков%22,%22short_name%22:%22Лесная%20Тропа%22,%22description%22:%22Развивающая%20игра%20для%20детей%203-7%20лет.%20Развивает%20память,%20логику,%20внимание.%20Работает%20без%20интернета!%22,%22start_url%22:%22./%22,%22scope%22:%22./%22,%22display%22:%22standalone%22,%22orientation%22:%22portrait-primary%22,%22background_color%22:%22%23FFF9F0%22,%22theme_color%22:%2332CD32%22,%22categories%22:[%22education%22,%22games%22],%22prefer_related_applications%22:false,%22screenshots%22:[{%22src%22:%22data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%20540%20720%27%3E%3Crect%20fill=%27%23FFF9F0%27%20width=%27540%27%20height=%27720%27/%3E%3Ctext%20x=%27270%27%20y=%27350%27%20font-size=%2762%27%20text-anchor=%27middle%27%20dominant-baseline=%27middle%27%20font-family=%27Arial%27%3E🌳✨🦉🎮%3C/text%3E%3C/svg%3E%22,%22sizes%22:%22540x720%22,%22type%22:%22image/svg+xml%22,%22form_factor%22:%22narrow%22}],%22icons%22:[{%22src%22:%22data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%20192%20192%27%3E%3Crect%20fill=%27%2332CD32%27%20width=%27192%27%20height=%27192%27%20rx=%2745%27/%3E%3Ctext%20x=%2796%27%20y=%27120%27%20font-size=%2798%27%20text-anchor=%27middle%27%20dominant-baseline=%27middle%27%3E🌳%3C/text%3E%3C/svg%3E%22,%22sizes%22:%22192x192%22,%22type%22:%22image/svg+xml%22,%22purpose%22:%22any%22},{%22src%22:%22data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%20512%20512%27%3E%3Crect%20fill=%27%2332CD32%27%20width=%27512%27%20height=%27512%27%20rx=%27120%27/%3E%3Ctext%20x=%27256%27%20y=%27320%27%20font-size=%27280%27%20text-anchor=%27middle%27%20dominant-baseline=%27middle%27%3E🌳%3C/text%3E%3C/svg%3E%22,%22sizes%22:%22512x512%22,%22type%22:%22image/svg+xml%22,%22purpose%22:%22any%20maskable%22}]}" />
+  
+  <!-- ============ APPLE & FAVICON ============ -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270%200%20180%20180%27%3E%3Crect fill=%27%2332CD32%27 width=%27180%27 height=%27180%27 rx=%2740%27/%3E%3Ctext x=%2790%27 y=%27110%27 font-size=%2790%27 text-anchor=%27middle%27%3E🌳%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270%200%20100%20100%27%3E%3Ctext x=%2750%27 y=%2775%27 font-size=%2780%27 text-anchor=%27middle%27%3E🌳%3C/text%3E%3C/svg%3E" />
+  
+  <title>🌳 Лесная Тропа PWA v3.0 - Образовательная игра</title>
+  
+  <style>
+    :root {
+      --cream: #FFF9F0;
+      --peach: #FFEFD5;
+      --mint: #E8F8F5;
+      --lemon: #FFFACD;
+      --lavender: #F0E6FF;
+      --green: #32CD32;
+      --orange: #FF8C00;
+      --red: #FF6B6B;
+      --blue: #1E90FF;
+      --purple: #9370DB;
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+      --safe-top: max(0px, env(safe-area-inset-top));
+      --safe-bottom: max(0px, env(safe-area-inset-bottom));
+    }
 
-            document.querySelectorAll('#settingsCharacterGrid .character-btn').forEach(btn => {
-                btn.classList.toggle('selected', btn.dataset.character === gameState.character);
-            });
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --cream: #2a2a2a;
+        --peach: #3d3d3d;
+        --mint: #1f4f4f;
+        --lemon: #4a4a2a;
+        --lavender: #3d2d4d;
+        --green: #4CAF50;
+        --orange: #FFA500;
+      }
+    }
 
-            Object.keys(games).forEach(gameType => {
-                const level = gameState.progress[gameType]  1;
-                const elem = document.getElementById(gameType + '-level');
-                if (elem) {
-                    elem.textContent = 'Уровень ' + Math.min(level, games[gameType].maxLevels);
-                }
-            });
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+    }
 
-            document.getElementById('soundBtn').textContent = gameState.soundEnabled ? '🔊' : '🔇';
-            document.getElementById('soundToggle').checked = gameState.soundEnabled;
-            document.getElementById('volumeSlider').value = gameState.volume;
-            document.getElementById('volumeValue').textContent = gameState.volume + '%';
-        }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--cream);
+      overflow: hidden;
+      -webkit-touch-callout: none;
+      position: fixed;
+    }
 
-        // ==================== SERVICE WORKER ====================
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('data:application/javascript,' + encodeURIComponent(`
-                self.addEventListener('install', e => {
-                    self.skipWaiting();
-                });
-                self.addEventListener('activate', e => {
-                    e.waitUntil(clients.claim());
-                });
-                self.addEventListener('fetch', e => {
-                    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
-                });
-            `)).catch(() => {});
-        }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--safe-top) 0 var(--safe-bottom) 0;
+    }
 
-        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
-        window.addEventListener('load', () => {
-            loadState();
-            document.documentElement.style.overflow = 'hidden';
-            document.body.style.overflow = 'hidden';
-        });
+    #app {
+      width: 100vw;
+      height: 100vh;
+      max-width: 900px;
+      max-height: 640px;
+      background: linear-gradient(180deg, var(--cream), var(--mint));
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+    }
 
-        // ==================== ПРЕДОТВРАЩЕНИЕ СКРОЛЛА ====================
-        document.addEventListener('touchmove', (e) => {
-            if (e.target.tagName !== 'INPUT' && e.target.id !== 'snake-game-canvas') {
-                e.preventDefault();
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s var(--ease);
+      padding: 16px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      z-index: 1;
+    }
+
+    .screen.active {
+      display: flex;
+      z-index: 10;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .btn {
+      width: 100%;
+      padding: clamp(10px, 3vw, 14px) clamp(14px, 4vw, 18px);
+      font-size: clamp(14px, 3vw, 16px);
+      font-weight: 700;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      background: var(--green);
+      color: #000;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      transition: all 0.15s var(--ease);
+      touch-action: manipulation;
+      will-change: transform, box-shadow;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: var(--peach);
+      color: #333;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--green);
+      color: var(--green);
+    }
+
+    .title {
+      font-size: clamp(24px, 8vw, 36px);
+      font-weight: 800;
+      text-align: center;
+      margin: 0 0 16px 0;
+      animation: slideIn 0.6s var(--ease);
+    }
+
+    .subtitle {
+      font-size: clamp(12px, 2.5vw, 14px);
+      text-align: center;
+      color: #666;
+      margin: 0 0 24px 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(clamp(90px, 20vw, 110px), 1fr));
+      gap: clamp(8px, 2vw, 12px);
+      width: 100%;
+      padding: 16px;
+      will-change: contents;
+    }
+
+    .game-item {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, var(--peach), var(--lavender));
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      will-change: transform;
+    }
+
+    .game-item:active {
+      transform: scale(0.95);
+    }
+
+    .game-item-emoji {
+      font-size: clamp(28px, 7vw, 40px);
+      margin-bottom: 4px;
+    }
+
+    .game-item-name {
+      font-size: clamp(10px, 2vw, 12px);
+      font-weight: 600;
+      text-align: center;
+      word-break: break-word;
+    }
+
+    .stat-box {
+      background: linear-gradient(135deg, var(--lemon), var(--peach));
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .stat-value {
+      font-size: clamp(20px, 5vw, 28px);
+      font-weight: 800;
+      color: var(--green);
+    }
+
+    .stat-label {
+      font-size: clamp(11px, 2vw, 13px);
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      animation: fadeIn 0.3s var(--ease);
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-content {
+      background: var(--cream);
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      animation: slideIn 0.3s var(--ease);
+    }
+
+    .modal-title {
+      font-size: clamp(18px, 5vw, 24px);
+      font-weight: 800;
+      margin: 0 0 16px 0;
+    }
+
+    .modal-text {
+      font-size: clamp(12px, 2.5vw, 14px);
+      line-height: 1.6;
+      margin: 0 0 16px 0;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .modal-buttons .btn {
+      flex: 1;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 12px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      gap: 8px;
+      will-change: transform;
+    }
+
+    .header-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: none;
+      background: var(--green);
+      color: #000;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s var(--ease);
+      will-change: transform, box-shadow;
+    }
+
+    .header-btn:active {
+      transform: scale(0.9);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      transition: width 0.3s var(--ease);
+      width: 0%;
+      will-change: width;
+    }
+
+    .game-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+      max-width: 400px;
+      will-change: contents;
+    }
+
+    .option-btn {
+      aspect-ratio: 1;
+      font-size: clamp(32px, 10vw, 56px);
+      background: linear-gradient(135deg, var(--peach), var(--lavender));
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+      will-change: transform, background;
+    }
+
+    .option-btn:active {
+      transform: scale(0.95);
+    }
+
+    .option-btn.correct {
+      background: linear-gradient(135deg, #90EE90, var(--green));
+      animation: pulse 0.5s var(--ease);
+    }
+
+    .option-btn.wrong {
+      background: linear-gradient(135deg, #FFB6C6, var(--red));
+      animation: shake 0.5s var(--ease);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .scrollable {
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      max-height: 70vh;
+      width: 100%;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--green);
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: inherit;
+      background: var(--cream);
+      color: #000;
+    }
+
+    .toggle {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--peach);
+      border-radius: 8px;
+      margin: 8px 0;
+    }
+
+    .toggle-switch {
+      width: 50px;
+      height: 28px;
+      background: #ccc;
+      border-radius: 14px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s var(--ease);
+      will-change: background;
+    }
+
+    .toggle-switch.on {
+      background: var(--green);
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: all 0.3s var(--ease);
+      will-change: left;
+    }
+
+    .toggle-switch.on::after {
+      left: 24px;
+    }
+
+    @media (max-width: 480px) {
+      #app {
+        border-radius: 16px;
+        max-height: 100vh;
+      }
+
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .game-options {
+        grid-template-columns: 1fr;
+      }
+
+      .option-btn {
+        aspect-ratio: auto;
+        padding: 16px;
+      }
+    }
+
+    .install-prompt {
+      padding: 16px;
+      background: linear-gradient(135deg, var(--lemon), var(--peach));
+      border-radius: 12px;
+      margin: 16px;
+      text-align: center;
+      font-size: 14px;
+      display: none;
+      animation: slideIn 0.5s var(--ease);
+    }
+
+    .install-prompt.show {
+      display: block;
+    }
+
+    .pwa-status {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      padding: 12px 16px;
+      background: var(--green);
+      color: #000;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      z-index: 2000;
+      display: none;
+      animation: slideIn 0.5s var(--ease);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .pwa-status.show {
+      display: block;
+    }
+
+    .pwa-offline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--orange);
+      color: #000;
+      padding: 8px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 12px;
+      z-index: 2001;
+      display: none;
+    }
+
+    .pwa-offline.show {
+      display: block;
+    }
+
+    @supports (padding: max(0px)) {
+      body {
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="pwa-offline" id="offlineIndicator">📡 Вы офлайн - приложение работает из кэша</div>
+  
+  <div id="app">
+    <!-- Главное меню -->
+    <div class="screen active" id="menuScreen">
+      <div style="text-align: center; width: 100%;">
+        <div class="title">🌳✨ ЛЕСНАЯ ТРОПА</div>
+        <div class="subtitle">v3.0 PWA - Образовательная игра</div>
+        <div style="font-size: 48px; margin: 20px 0;">🦉🌸🎵🎨🎯🧩</div>
+        <div class="install-prompt" id="installPrompt">
+          <div style="margin-bottom: 8px;">📱 Установить приложение на экран?</div>
+          <button class="btn" style="padding: 8px; font-size: 14px;" onclick="installPWA()">Добавить на экран</button>
+        </div>
+      </div>
+      <div style="width: 100%; padding: 16px; display: flex; flex-direction: column; gap: 8px;">
+        <button class="btn" onclick="goToScreen('profileScreen')">🎮 Новая игра</button>
+        <button class="btn btn-secondary" onclick="goToScreen('statsScreen')">📊 Статистика</button>
+        <button class="btn btn-secondary" onclick="goToScreen('medalsScreen')">🏆 Медали</button>
+        <button class="btn btn-secondary" onclick="goToScreen('settingsScreen')">⚙️ Настройки</button>
+      </div>
+    </div>
+
+    <!-- Выбор профиля -->
+    <div class="screen" id="profileScreen">
+      <div class="header">
+        <button class="header-btn" onclick="goToScreen('menuScreen')">←</button>
+        <span style="flex: 1; text-align: center; font-weight: 700;">Профиль</span>
+        <button class="header-btn" style="background: var(--orange);" onclick="createNewProfile()">+</button>
+      </div>
+      <div class="scrollable" id="profilesList"></div>
+    </div>
+
+    <!-- Выбор режима -->
+    <div class="screen" id="modeScreen">
+      <div class="header">
+        <button class="header-btn" onclick="goToScreen('profileScreen')">←</button>
+        <span style="flex: 1; text-align: center; font-weight: 700;">Режим игры</span>
+      </div>
+      <div style="width: 100%; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+        <button class="btn" onclick="selectMode('story')">📖 История</button>
+        <button class="btn" onclick="selectMode('arcade')">🕹️ Аркада</button>
+        <button class="btn" onclick="selectMode('learning')">🎓 Обучение</button>
+        <button class="btn" onclick="selectMode('relax')">🧘 Релаксация</button>
+        <button class="btn" onclick="selectMode('twoPlayer')">👯 Два игрока</button>
+      </div>
+    </div>
+
+    <!-- Выбор игры -->
+    <div class="screen" id="gameSelectScreen">
+      <div class="header">
+        <button class="header-btn" onclick="goToScreen('modeScreen')">←</button>
+        <span style="flex: 1; text-align: center; font-weight: 700;">Выбери игру</span>
+      </div>
+      <div class="grid" id="gamesList"></div>
+    </div>
+
+    <!-- Игровой экран -->
+    <div class="screen" id="gameScreen">
+      <div class="header">
+        <button class="header-btn" onclick="pauseGame()">⏸️</button>
+        <span style="flex: 1; text-align: center; font-weight: 700;">Уровень <span id="currentLevel">1</span></span>
+        <div style="font-size: 18px; font-weight: 700; color: var(--green);">⭐ <span id="gameScore">0</span></div>
+      </div>
+      <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; gap: 16px;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div style="font-size: clamp(16px, 4vw, 24px); font-weight: 700; text-align: center;" id="gameQuestion">Загрузка...</div>
+        <div class="game-options" id="gameOptions"></div>
+      </div>
+    </div>
+
+    <!-- Статистика -->
+    <div class="screen" id="statsScreen">
+      <div class="header">
+        <button class="header-btn" onclick="goToScreen('menuScreen')">←</button>
+        <span style="flex: 1; text-align: center; font-weight: 700;">Статистика</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; padding: 12px;" id="statsGrid"></div>
+    </div>
+
+    <!-- Медали -->
+    <div class="screen" id="medalsScreen">
+      <div class="header">
+        <button class="header-btn" onclick="goToScreen('menuScreen')">←</button>
+        <span style="flex: 1; text-align: center; font-weight: 700;">Медали</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; padding: 16px; gap: 8px; width: 100%;" id="medalsList"></div>
+    </div>
+
+    <!-- Настройки -->
+    <div class="screen" id="settingsScreen">
+      <div class="header">
+        <button class="header-btn" onclick="goToScreen('menuScreen')">←</button>
+        <span style="flex: 1; text-align: center; font-weight: 700;">Настройки</span>
+      </div>
+      <div style="width: 100%; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+        <div class="toggle">
+          <span style="flex: 1; font-weight: 700;">🔊 Звук</span>
+          <div class="toggle-switch on" id="soundToggle" onclick="toggleSetting('sound')"></div>
+        </div>
+        <div class="toggle">
+          <span style="flex: 1; font-weight: 700;">🌙 Тёмная тема</span>
+          <div class="toggle-switch" id="darkToggle" onclick="toggleSetting('darkMode')"></div>
+        </div>
+        <div style="background: var(--peach); padding: 12px; border-radius: 8px;">
+          <label style="font-weight: 700; display: block; margin-bottom: 8px;">⏱️ Таймер сессии (мин)</label>
+          <input type="number" id="timerInput" min="5" max="120" value="30" style="width: 100%; padding: 8px; border: none; border-radius: 6px;">
+        </div>
+        <button class="btn btn-secondary" onclick="resetData()">🔄 Сбросить данные</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальные окна -->
+  <div class="modal" id="pauseModal">
+    <div class="modal-content">
+      <div style="text-align: center;">
+        <div class="modal-title">⏸️ Пауза</div>
+        <div class="modal-text">Игра приостановлена</div>
+        <div style="display: flex; gap: 12px; margin-top: 16px;">
+          <button class="btn" style="flex: 1;" onclick="resumeGame()">▶️ Продолжить</button>
+          <button class="btn btn-secondary" style="flex: 1;" onclick="quitGame()">❌ Выход</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="gameOverModal">
+    <div class="modal-content">
+      <div style="text-align: center;">
+        <div class="modal-title" id="gameOverTitle">🎉 Готово!</div>
+        <div class="modal-text">Твой результат: <span id="finalScore" style="font-size: 24px; font-weight: 800; color: var(--green);">0</span> очков</div>
+        <div style="display: flex; gap: 12px; margin-top: 16px;">
+          <button class="btn" style="flex: 1;" onclick="goToScreen('gameSelectScreen')">🔄 Ещё раз</button>
+          <button class="btn btn-secondary" style="flex: 1;" onclick="goToScreen('modeScreen')">🎮 Другая игра</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pwa-status" id="pwaStatus">✅ Приложение готово! Добавьте на экран</div>
+
+  <script>
+    // ============ PWA РЕГИСТРАЦИЯ И ОПТИМИЗАЦИЯ ============
+    
+    // Регистрация Service Worker с оптимизацией
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        const swCode = `
+          const CACHE_NAME = 'forest-trail-v3-0-pwa';
+          const urlsToCache = ['/'];
+
+          self.addEventListener('install', event => {
+            event.waitUntil(
+              caches.open(CACHE_NAME)
+                .then(cache => {
+                  console.log('✅ Cache opened');
+                  return cache.addAll(urlsToCache).catch(() => {});
+                })
+                .catch(() => {})
+            );
+            self.skipWaiting();
+          });
+
+          self.addEventListener('activate', event => {
+            event.waitUntil(
+              caches.keys().then(cacheNames => {
+                return Promise.all(
+                  cacheNames.map(cacheName => {
+                    if (cacheName !== CACHE_NAME) {
+                      return caches.delete(cacheName);
+                    }
+                  })
+                );
+              })
+            );
+            self.clients.claim();
+          });
+
+          self.addEventListener('fetch', event => {
+            if (event.request.method !== 'GET') {
+              return;
             }
-        }, { passive: false });
-    </script>
+
+            event.respondWith(
+              caches.match(event.request)
+                .then(response => {
+                  if (response) {
+                    return response;
+                  }
+
+                  return fetch(event.request).then(response => {
+                    if (!response || response.status !== 200 || response.type !== 'basic') {
+                      return response;
+                    }
+
+                    const responseToCache = response.clone();
+                    caches.open(CACHE_NAME).then(cache => {
+                      cache.put(event.request, responseToCache);
+                    });
+
+                    return response;
+                  }).catch(() => {
+                    return new Response('Offline mode');
+                  });
+                })
+            );
+          });
+        `;
+
+        navigator.serviceWorker.register(
+          'data:application/javascript,' + encodeURIComponent(swCode)
+        ).then(reg => {
+          console.log('✅ Service Worker registered');
+        }).catch(err => {
+          console.log('Service Worker registration failed:', err);
+        });
+      });
+    }
+
+    // Обработка offline/online
+    window.addEventListener('offline', () => {
+      document.getElementById('offlineIndicator').classList.add('show');
+    });
+
+    window.addEventListener('online', () => {
+      document.getElementById('offlineIndicator').classList.remove('show');
+    });
+
+    // ============ INSTALL PROMPT ============
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installPrompt').classList.add('show');
+      document.getElementById('pwaStatus').classList.add('show');
+    });
+
+    window.addEventListener('appinstalled', () => {
+      console.log('✅ PWA installed');
+      deferredPrompt = null;
+      document.getElementById('installPrompt').classList.remove('show');
+    });
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('✅ PWA accepted installation');
+            document.getElementById('installPrompt').classList.remove('show');
+            document.getElementById('pwaStatus').textContent = '✅ Установлено успешно!';
+            setTimeout(() => {
+              document.getElementById('pwaStatus').classList.remove('show');
+            }, 3000);
+          }
+          deferredPrompt = null;
+        });
+      }
+    }
+
+    // ============ ОСНОВНОЕ СОСТОЯНИЕ ============
+    let gameState = {
+      currentProfile: null,
+      currentMode: null,
+      currentGame: null,
+      score: 0,
+      level: 1,
+      soundEnabled: true,
+      darkMode: false,
+      profiles: [],
+      stats: {},
+      medals: {},
+      sessionStart: Date.now(),
+      totalSessionTime: 0
+    };
+
+    // ============ ИНИЦИАЛИЗАЦИЯ ============
+    function init() {
+      loadData();
+      renderMedals();
+      setupSettings();
+      
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => {
+          document.querySelectorAll('.screen').forEach(s => {
+            s.style.willChange = 'auto';
+          });
+        });
+      }
+      
+      // Проверка поддержки PWA
+      if ('serviceWorker' in navigator && 'caches' in window) {
+        console.log('✅ PWA fully supported');
+      }
+    }
+
+    // ============ НАВИГАЦИЯ МЕЖДУ ЭКРАНАМИ ============
+    function goToScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+
+      if (screenId === 'statsScreen') renderStats();
+      if (screenId === 'profileScreen') renderProfiles();
+      if (screenId === 'medalsScreen') renderMedals();
+    }
+
+    // ============ ПРОФИЛИ ============
+    function renderProfiles() {
+      const list = document.getElementById('profilesList');
+      list.innerHTML = '';
+      
+      if (gameState.profiles.length === 0) {
+        const div = document.createElement('div');
+        div.style.cssText = 'padding: 20px; text-align: center; color: #999;';
+        div.textContent = '👶 Нет профилей. Создай первый!';
+        list.appendChild(div);
+      }
+      
+      gameState.profiles.forEach((profile, index) => {
+        const div = document.createElement('div');
+        div.style.cssText = 'padding: 12px; margin: 8px; background: linear-gradient(135deg, #FFD700, #FFA500); border-radius: 12px; cursor: pointer; text-align: center; font-weight: 700; font-size: 18px; transition: all 0.2s;';
+        div.textContent = `${profile.emoji} ${profile.name}`;
+        div.onmouseover = () => div.style.transform = 'scale(1.05)';
+        div.onmouseout = () => div.style.transform = 'scale(1)';
+        div.onclick = () => selectProfile(index);
+        list.appendChild(div);
+      });
+    }
+
+    function createNewProfile() {
+      const name = prompt('Введи своё имя:', 'Ребёнок');
+      if (!name) return;
+
+      const emojis = ['🦁', '🐯', '🐻', '🦊', '🐼', '🦋', '🐢', '🦆', '🦉', '🦚', '🐔', '🐨'];
+      const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+      gameState.profiles.push({
+        name,
+        emoji,
+        stats: { levels: 0, score: 0, medals: 0, time: 0 }
+      });
+
+      saveData();
+      renderProfiles();
+    }
+
+    function selectProfile(index) {
+      gameState.currentProfile = index;
+      saveData();
+      goToScreen('modeScreen');
+    }
+
+    // ============ ИГРЫ И РЕЖИМЫ ============
+    const games = [
+      { name: 'Память', emoji: '🦉', type: 'memory' },
+      { name: 'Считай', emoji: '🔢', type: 'count' },
+      { name: 'Цветные', emoji: '🌸', type: 'colors' },
+      { name: 'Лабиринт', emoji: '🗺️', type: 'maze' },
+      { name: 'Нотки', emoji: '🎵', type: 'music' },
+      { name: 'Точки', emoji: '🎨', type: 'dots' },
+      { name: 'Фигуры', emoji: '🔷', type: 'shapes' },
+      { name: 'Звёзды', emoji: '⭐', type: 'stars' },
+      { name: 'Слова', emoji: '🎲', type: 'words' },
+      { name: 'Картинки', emoji: '📸', type: 'pictures' },
+      { name: 'Пары', emoji: '🎯', type: 'pairs' },
+      { name: 'Загадки', emoji: '🦁', type: 'riddles' }
+    ];
+
+    function selectMode(mode) {
+      gameState.currentMode = mode;
+      renderGamesList();
+      goToScreen('gameSelectScreen');
+    }
+
+    function renderGamesList() {
+      const list = document.getElementById('gamesList');
+      list.innerHTML = '';
+
+      games.forEach(game => {
+        const div = document.createElement('div');
+        div.className = 'game-item';
+        div.innerHTML = `<div class="game-item-emoji">${game.emoji}</div><div class="game-item-name">${game.name}</div>`;
+        div.onclick = () => startGame(game);
+        list.appendChild(div);
+      });
+    }
+
+    // ============ ИГРОВАЯ ЛОГИКА ============
+    function startGame(game) {
+      gameState.currentGame = game;
+      gameState.score = 0;
+      gameState.level = 1;
+      goToScreen('gameScreen');
+      loadGameLevel();
+    }
+
+    function loadGameLevel() {
+      const game = gameState.currentGame;
+      let question, options, correct;
+
+      if (game.type === 'count') {
+        const num = Math.floor(Math.random() * 10) + 1;
+        question = `Сколько? ${Array(num).fill('🍎').join('')}`;
+        options = Array.from({length: 4}, (_, i) => ({
+          text: i + 1,
+          correct: (i + 1 === num)
+        }));
+      } else if (game.type === 'colors') {
+        const colors = ['🔴', '🟠', '🟡', '🟢', '🔵', '🟣'];
+        const correct_idx = Math.floor(Math.random() * 6);
+        const color = colors[correct_idx];
+        question = `Найди: ${color}`;
+        options = Array.from({length: 4}, (_, i) => ({
+          text: colors[(correct_idx + i) % 6],
+          correct: (i === 0)
+        }));
+      } else if (game.type === 'memory') {
+        question = 'Запомни: 🦉 🌸 🎵';
+        const items = ['🦉', '🌸', '🎵', '🎨'];
+        options = items.map((item, i) => ({
+          text: item,
+          correct: i < 3
+        }));
+      } else if (game.type === 'shapes') {
+        const shapes = ['🔵', '🟩', '🟥', '⭐'];
+        question = 'Найди круг!';
+        options = shapes.map((shape, i) => ({
+          text: shape,
+          correct: (i === 0)
+        }));
+      } else if (game.type === 'music') {
+        question = '🎵 Выбери звон!';
+        options = ['🔔', '🎺', '🎸', '🥁'].map((item, i) => ({
+          text: item,
+          correct: (i === 0)
+        }));
+      } else if (game.type === 'dots') {
+        question = '🎨 Соедини точки!';
+        options = Array.from({length: 4}, (_, i) => ({
+          text: i === 0 ? '✓' : '✗',
+          correct: (i === 0)
+        }));
+      } else {
+        question = 'Выбери верно!';
+        options = Array.from({length: 4}, (_, i) => ({
+          text: i === 0 ? '✓' : '✗',
+          correct: (i === 0)
+        }));
+      }
+
+      options.sort(() => Math.random() - 0.5);
+      renderGame(question, options);
+    }
+
+    function renderGame(question, options) {
+      document.getElementById('gameQuestion').textContent = question;
+      document.getElementById('currentLevel').textContent = gameState.level;
+      document.getElementById('gameScore').textContent = gameState.score;
+      document.getElementById('progressFill').style.width = (gameState.level / 10 * 100) + '%';
+
+      const optionsDiv = document.getElementById('gameOptions');
+      optionsDiv.innerHTML = '';
+
+      options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt.text;
+        btn.onclick = () => selectOption(btn, opt.correct, options);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function selectOption(btn, correct, options) {
+      if (correct) {
+        btn.classList.add('correct');
+        gameState.score += 10;
+        playSound('correct');
+      } else {
+        btn.classList.add('wrong');
+        playSound('wrong');
+      }
+
+      setTimeout(() => {
+        gameState.level++;
+        if (gameState.level > 10) {
+          endGame();
+        } else {
+          loadGameLevel();
+        }
+      }, 500);
+    }
+
+    function pauseGame() {
+      document.getElementById('pauseModal').classList.add('active');
+    }
+
+    function resumeGame() {
+      document.getElementById('pauseModal').classList.remove('active');
+    }
+
+    function quitGame() {
+      document.getElementById('pauseModal').classList.remove('active');
+      goToScreen('gameSelectScreen');
+    }
+
+    function endGame() {
+      document.getElementById('finalScore').textContent = gameState.score;
+      document.getElementById('gameOverModal').classList.add('active');
+      
+      const profile = gameState.profiles[gameState.currentProfile];
+      if (profile) {
+        profile.stats.score += gameState.score;
+        profile.stats.levels++;
+        profile.stats.time += (Date.now() - gameState.sessionStart) / 60000;
+      }
+      saveData();
+    }
+
+    // ============ МЕДАЛИ ============
+    const medalsList = [
+      { name: 'Новичок', emoji: '🥉', condition: 'score >= 50' },
+      { name: 'Профессионал', emoji: '🥈', condition: 'score >= 200' },
+      { name: 'Мастер', emoji: '🥇', condition: 'score >= 500' },
+      { name: 'Гений', emoji: '👑', condition: 'score >= 1000' },
+      { name: 'Скоростной', emoji: '⚡', condition: 'levels >= 5' },
+      { name: 'Утомитель', emoji: '😴', condition: 'levels >= 20' },
+      { name: 'Трудоголик', emoji: '🔥', condition: 'levels >= 50' },
+      { name: 'Легенда', emoji: '🌟', condition: 'levels >= 100' },
+      { name: 'Ночной Филин', emoji: '🌙', condition: 'time >= 5' },
+      { name: 'Первый Шаг', emoji: '👣', condition: 'first_game' },
+      { name: 'Собиратель', emoji: '🎒', condition: 'score >= 300' },
+      { name: 'Чемпион', emoji: '🏅', condition: 'levels >= 150' },
+      { name: 'Марафонец', emoji: '🏃', condition: 'time >= 10' },
+      { name: 'Почемучка', emoji: '❓', condition: 'games_played >= 5' },
+      { name: 'Мультигеймер', emoji: '🎮', condition: 'games_played >= 10' },
+      { name: 'Перфекционист', emoji: '✨', condition: 'perfect_games >= 3' },
+      { name: 'Суперзвезда', emoji: '⭐⭐⭐', condition: 'score >= 2000' },
+      { name: 'Философ', emoji: '🤔', condition: 'sessions >= 20' },
+      { name: 'Мудрец', emoji: '🧙', condition: 'score >= 5000' },
+      { name: 'Вечный Странник', emoji: '🚀', condition: 'time >= 100' }
+    ];
+
+    function renderMedals() {
+      const list = document.getElementById('medalsList');
+      list.innerHTML = '';
+
+      medalsList.forEach((medal, idx) => {
+        const div = document.createElement('div');
+        div.style.cssText = 'width: 60px; height: 60px; background: linear-gradient(135deg, #FFD700, #FFA500); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); cursor: pointer; transition: all 0.2s; will-change: transform;';
+        if (!checkMedalCondition(medal)) {
+          div.style.background = 'linear-gradient(135deg, #ccc, #999)';
+          div.style.opacity = '0.6';
+        }
+        div.textContent = medal.emoji;
+        div.title = medal.name;
+        div.onmouseover = () => div.style.transform = 'scale(1.1)';
+        div.onmouseout = () => div.style.transform = 'scale(1)';
+        list.appendChild(div);
+      });
+    }
+
+    function checkMedalCondition(medal) {
+      const profile = gameState.profiles[gameState.currentProfile];
+      if (!profile) return false;
+      
+      if (medal.condition.includes('score')) {
+        return profile.stats.score >= parseInt(medal.condition);
+      }
+      if (medal.condition.includes('levels')) {
+        return profile.stats.levels >= parseInt(medal.condition);
+      }
+      if (medal.condition.includes('time')) {
+        return profile.stats.time >= parseInt(medal.condition);
+      }
+      return false;
+    }
+
+    // ============ СТАТИСТИКА ============
+    function renderStats() {
+      const profile = gameState.profiles[gameState.currentProfile];
+      if (!profile) {
+        document.getElementById('statsGrid').innerHTML = '<div style="padding: 16px; grid-column: 1/-1;">Выбери профиль</div>';
+        return;
+      }
+
+      const stats = profile.stats;
+      document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-box">
+          <div class="stat-value">${stats.levels || 0}</div>
+          <div class="stat-label">Уровней</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value">${stats.score || 0}</div>
+          <div class="stat-label">Очков</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value">${stats.medals || 0}</div>
+          <div class="stat-label">Медалей</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value">${Math.round((stats.time || 0) * 10) / 10}м</div>
+          <div class="stat-label">Времени игры</div>
+        </div>
+      `;
+    }
+
+    // ============ НАСТРОЙКИ ============
+    function setupSettings() {
+      if (gameState.darkMode) {
+        document.documentElement.style.colorScheme = 'dark';
+        document.getElementById('darkToggle').classList.add('on');
+      } else {
+        document.documentElement.style.colorScheme = 'light';
+      }
+    }
+
+    function toggleSetting(setting) {
+      if (setting === 'sound') {
+        gameState.soundEnabled = !gameState.soundEnabled;
+        document.getElementById('soundToggle').classList.toggle('on');
+      } else if (setting === 'darkMode') {
+        gameState.darkMode = !gameState.darkMode;
+        document.getElementById('darkToggle').classList.toggle('on');
+        document.documentElement.style.colorScheme = gameState.darkMode ? 'dark' : 'light';
+      }
+      saveData();
+    }
+
+    function resetData() {
+      if (confirm('Ты уверен? Все данные будут удалены!')) {
+        gameState = {
+          currentProfile: null,
+          currentMode: null,
+          currentGame: null,
+          score: 0,
+          level: 1,
+          soundEnabled: true,
+          darkMode: false,
+          profiles: [],
+          stats: {},
+          medals: {},
+          sessionStart: Date.now(),
+          totalSessionTime: 0
+        };
+        saveData();
+        goToScreen('menuScreen');
+      }
+    }
+
+    // ============ ЗВУКИ (Web Audio API) ============
+    let audioContext;
+    function getAudioContext() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioContext;
+    }
+
+    function playSound(type) {
+      if (!gameState.soundEnabled) return;
+
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'correct') {
+          osc.frequency.value = 523.25;
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+          osc.start(now);
+          osc.stop(now + 0.2);
+        } else if (type === 'wrong') {
+          osc.frequency.value = 200;
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+        }
+      } catch (e) {
+        console.log('Audio not available');
+      }
+    }
+
+    // ============ СОХРАНЕНИЕ ДАННЫХ ============
+    function saveData() {
+      try {
+        localStorage.setItem('gameState', JSON.stringify(gameState));
+      } catch (e) {
+        console.warn('LocalStorage full or unavailable');
+      }
+    }
+
+    function loadData() {
+      try {
+        const saved = localStorage.getItem('gameState');
+        if (saved) {
+          gameState = JSON.parse(saved);
+        }
+      } catch (e) {
+        console.warn('Failed to load data');
+      }
+    }
+
+    // ============ PERFORMANCE OPTIMIZATION ============
+    
+    // Reduce motion support
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (prefersReducedMotion.matches) {
+      document.documentElement.style.setProperty('--ease', 'linear');
+    }
+
+    // Prevent zoom on double tap
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // ============ ЗАПУСК ============
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
 </body>
 </html>
