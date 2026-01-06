@@ -1,0 +1,52 @@
+('selected', btn.dataset.character === gameState.character);
+            });
+
+            document.querySelectorAll('#settingsCharacterGrid .character-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.character === gameState.character);
+            });
+
+            Object.keys(games).forEach(gameType => {
+                const level = gameState.progress[gameType]  1;
+                const elem = document.getElementById(gameType + '-level');
+                if (elem) {
+                    elem.textContent = 'Уровень ' + Math.min(level, games[gameType].maxLevels);
+                }
+            });
+
+            document.getElementById('soundBtn').textContent = gameState.soundEnabled ? '🔊' : '🔇';
+            document.getElementById('soundToggle').checked = gameState.soundEnabled;
+            document.getElementById('volumeSlider').value = gameState.volume;
+            document.getElementById('volumeValue').textContent = gameState.volume + '%';
+        }
+
+        // ==================== SERVICE WORKER ====================
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:application/javascript,' + encodeURIComponent(`
+                self.addEventListener('install', e => {
+                    self.skipWaiting();
+                });
+                self.addEventListener('activate', e => {
+                    e.waitUntil(clients.claim());
+                });
+                self.addEventListener('fetch', e => {
+                    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+                });
+            `)).catch(() => {});
+        }
+
+        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+        window.addEventListener('load', () => {
+            loadState();
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+        });
+
+        // ==================== ПРЕДОТВРАЩЕНИЕ СКРОЛЛА ====================
+        document.addEventListener('touchmove', (e) => {
+            if (e.target.tagName !== 'INPUT' && e.target.id !== 'snake-game-canvas') {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>
